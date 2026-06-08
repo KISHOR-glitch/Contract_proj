@@ -1,0 +1,25 @@
+# IDEs
+.idea/
+.vscode/
+*.iml
+*.swp
+*.log
+
+# Node / Frontend
+node_modules/
+.next/
+out/
+build/
+.env*.local
+coverage/
+
+# Java / Maven / Backend
+target/
+*.jar
+*.war
+maven.zip
+apache-maven-*/
+
+# OS
+.DS_Store
+Thumbs.db
