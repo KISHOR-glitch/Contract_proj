@@ -66,7 +66,7 @@ class ContractServiceTest {
         void returnsPagedResponse() {
             Page<Contract> page = new PageImpl<>(
                     List.of(sampleContract), PageRequest.of(0, 10), 1);
-            when(contractRepository.findByFilters(isNull(), isNull(), any())).thenReturn(page);
+            when(contractRepository.findByFilters(eq(""), eq(""), any())).thenReturn(page);
 
             PagedResponse<?> result = contractService.getContracts(null, null, 0, 10);
 
@@ -78,34 +78,34 @@ class ContractServiceTest {
         @Test
         @DisplayName("passes trimmed search string to repository")
         void trimsSearchBeforeQuerying() {
-            when(contractRepository.findByFilters(eq("vendor"), isNull(), any()))
+            when(contractRepository.findByFilters(eq("vendor"), eq(""), any()))
                     .thenReturn(Page.empty());
 
             contractService.getContracts("  vendor  ", null, 0, 10);
 
-            verify(contractRepository).findByFilters(eq("vendor"), isNull(), any(Pageable.class));
+            verify(contractRepository).findByFilters(eq("vendor"), eq(""), any(Pageable.class));
         }
 
         @Test
         @DisplayName("normalises status to upper-case")
         void normalisesStatusToUpperCase() {
-            when(contractRepository.findByFilters(isNull(), eq("APPROVED"), any()))
+            when(contractRepository.findByFilters(eq(""), eq("APPROVED"), any()))
                     .thenReturn(Page.empty());
 
             contractService.getContracts(null, "approved", 0, 10);
 
-            verify(contractRepository).findByFilters(isNull(), eq("APPROVED"), any(Pageable.class));
+            verify(contractRepository).findByFilters(eq(""), eq("APPROVED"), any(Pageable.class));
         }
 
         @Test
-        @DisplayName("treats blank search/status as null (no filter)")
-        void treatsBlankAsNull() {
-            when(contractRepository.findByFilters(isNull(), isNull(), any()))
+        @DisplayName("treats blank search/status as empty string (no filter)")
+        void treatsBlankAsEmptyString() {
+            when(contractRepository.findByFilters(eq(""), eq(""), any()))
                     .thenReturn(Page.empty());
 
             contractService.getContracts("   ", "", 0, 10);
 
-            verify(contractRepository).findByFilters(isNull(), isNull(), any(Pageable.class));
+            verify(contractRepository).findByFilters(eq(""), eq(""), any(Pageable.class));
         }
     }
 
